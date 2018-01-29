@@ -179,6 +179,12 @@ def extract_MM_scripts(file_name_1,file_name_2):
 		if os.path.isfile(os.path.abspath(file)) and file == "libc++.so" or file == "libcutils.so" or file == "liblog.so" or file == "libselinux.so":
 			print file
 			shutil.copy(os.path.abspath(file),abs_file_dst_2)
+	os.chdir("../../../target/product/ktc_8g/root")
+	print "------"+os.path.abspath(os.curdir)
+	for file in os.listdir(os.curdir):
+		if os.path.isfile(os.path.abspath(file)) and file == "file_contexts":
+			print file
+			shutil.copy(os.path.abspath(file),abs_file_dst)
 	os.chdir(origin_path)
 
 
@@ -196,7 +202,7 @@ if __name__ == '__main__':
 	device_name = sys.argv[4]
 	
 	file_name ="project_"+project_name+"_"+tv_system 
-	image_file_dst = file_name +"/images_tst"
+	image_file_dst = file_name +"/images_test"
 	SN_scripts_file_dst = file_name+"/my_scripts/SN_scripts"
 	MM_scripts_file_dst = file_name+"/my_scripts/MM_scripts"
 	MM_lib_file_dst = file_name+"/my_scripts/my_lib"
