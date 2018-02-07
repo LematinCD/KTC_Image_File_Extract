@@ -57,7 +57,7 @@ def change_path(file_name):
 			print os.path.abspath(os.curdir)
 			break
 
-def extract_marshmallow(list):
+def extract_marshmallow(list,project_name,tv_system):
 	abs_file_dst = os.path.abspath(image_file_dst)
 	print abs_file_dst
 	for item in list:
@@ -70,6 +70,8 @@ def extract_marshmallow(list):
 		print file
 		if os.path.isfile(os.path.abspath(file)):
 			if re.match('system.img*',file):
+				continue
+			if file.find(project_name) > -1 and file.find(tv_system) > -1:
 				continue
 			shutil.copy(os.path.abspath(file),abs_file_dst)
 		if os.path.isdir(os.path.abspath(file)):
@@ -99,9 +101,10 @@ def extract_linux_x86(file_name_1,file_name_2):
 	change_path('(\w*)MM')
 	change_path('prebuilts')
 	change_path('tools')
-	change_path('linux-x86')
+	change_path('^linux-x86$')
 	for file in os.listdir(os.curdir):
 		if os.path.isdir(os.path.abspath(file)) and file == "crc" or file == "secureboot":
+			print "###############################"
 			my_copytree(os.path.abspath(file),os.path.join(abs_file_dst,file))
 	os.chdir(origin_path)
 
@@ -180,7 +183,6 @@ def extract_MM_scripts(file_name_1,file_name_2):
 			print file
 			shutil.copy(os.path.abspath(file),abs_file_dst_2)
 	os.chdir("../../../target/product/ktc_8g/root")
-	print "------"+os.path.abspath(os.curdir)
 	for file in os.listdir(os.curdir):
 		if os.path.isfile(os.path.abspath(file)) and file == "file_contexts":
 			print file
@@ -211,7 +213,7 @@ if __name__ == '__main__':
 	mkdir(make_dir_list)
 	
 	marshmallow_path_list = [src_name,'images','marshmallow',device_name]
-	extract_marshmallow(marshmallow_path_list)
+	extract_marshmallow(marshmallow_path_list,project_name,tv_system)
 	
 	system_path_list = [src_name,'(\w*)MM','out','target','product',device_name]
 	extract_system(src_name,device_name)
